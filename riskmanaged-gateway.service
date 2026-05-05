@@ -1,0 +1,13 @@
+[Unit]
+Description=RiskManaged Gateway
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/riskmanaged-gateway
+Restart=always
+RestartSec=5
+User=%u
+
+[Install]
+WantedBy=default.target
