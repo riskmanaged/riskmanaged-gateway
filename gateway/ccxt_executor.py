@@ -60,15 +60,25 @@ class CCXTExecutor:
 
     def _create_exchange(self, cfg: ExchangeConfig):
         """Create a CCXT exchange instance from an exchange config."""
+        from gateway.exchange_manager import WALLET_BASED_EXCHANGES
+
         exchange_class = getattr(ccxt, cfg.exchange_name, None)
         if exchange_class is None:
             raise ValueError(f"Unknown CCXT exchange: {cfg.exchange_name}")
 
-        config = {
-            "apiKey": cfg.api_key,
-            "secret": cfg.api_secret,
-            "enableRateLimit": True,
-        }
+        # Wallet-based exchanges (e.g. HyperLiquid) use walletAddress + privateKey
+        if cfg.exchange_name in WALLET_BASED_EXCHANGES:
+            config = {
+                "walletAddress": cfg.wallet_address or cfg.api_key,
+                "privateKey": cfg.api_secret,
+                "enableRateLimit": True,
+            }
+        else:
+            config = {
+                "apiKey": cfg.api_key,
+                "secret": cfg.api_secret,
+                "enableRateLimit": True,
+            }
         if cfg.password:
             config["password"] = cfg.password
 

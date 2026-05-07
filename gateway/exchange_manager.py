@@ -23,10 +23,14 @@ SUPPORTED_EXCHANGES = {
     "8": ("cryptocom", "Crypto.com"),
     "9": ("mexc", "MEXC"),
     "10": ("bitmex", "BitMEX"),
+    "11": ("hyperliquid", "HyperLiquid"),
 }
 
 # Exchanges that require a password/passphrase
 EXCHANGES_WITH_PASSWORD = {"kucoin", "okx"}
+
+# Exchanges that use wallet-based auth (walletAddress + privateKey)
+WALLET_BASED_EXCHANGES = {"hyperliquid"}
 
 
 def add_exchange_interactive() -> ExchangeConfig | None:
@@ -38,7 +42,7 @@ def add_exchange_interactive() -> ExchangeConfig | None:
     for num, (exchange_id, display_name) in SUPPORTED_EXCHANGES.items():
         console.print(f"  {num}. {display_name}")
 
-    choice = console.input("\n[bold]Select exchange (1-10):[/bold] ").strip()
+    choice = console.input("\n[bold]Select exchange (1-11):[/bold] ").strip()
     if choice not in SUPPORTED_EXCHANGES:
         console.print("[red]Invalid choice[/red]")
         return None
@@ -76,16 +80,36 @@ def add_exchange_interactive() -> ExchangeConfig | None:
         console.print("[red]Label must only contain letters, numbers, hyphens, and underscores.[/red]")
         return None
 
-    # API credentials
-    api_key = console.input("[bold]API Key:[/bold] ").strip()
-    if not api_key:
-        console.print("[red]API key is required[/red]")
-        return None
+    # API credentials — wallet-based or standard
+    is_wallet_based = exchange_id in WALLET_BASED_EXCHANGES
 
-    api_secret = console.input("[bold]API Secret:[/bold] ").strip()
-    if not api_secret:
-        console.print("[red]API secret is required[/red]")
-        return None
+    if is_wallet_based:
+        console.print(f"\n  [dim]{display_name} is a DEX — uses wallet-based authentication.[/dim]")
+        console.print("  [dim]Generate an API Wallet at: https://app.hyperliquid.xyz → API[/dim]")
+        console.print("  [dim]API wallets cannot withdraw funds — trading only.[/dim]\n")
+
+        wallet_address = console.input("[bold]Wallet Address (0x...):[/bold] ").strip()
+        if not wallet_address:
+            console.print("[red]Wallet address is required[/red]")
+            return None
+
+        api_secret = console.input("[bold]API Wallet Private Key:[/bold] ").strip()
+        if not api_secret:
+            console.print("[red]Private key is required[/red]")
+            return None
+
+        api_key = wallet_address  # Stored as api_key for consistency
+    else:
+        wallet_address = None
+        api_key = console.input("[bold]API Key:[/bold] ").strip()
+        if not api_key:
+            console.print("[red]API key is required[/red]")
+            return None
+
+        api_secret = console.input("[bold]API Secret:[/bold] ").strip()
+        if not api_secret:
+            console.print("[red]API secret is required[/red]")
+            return None
 
     password = None
     if exchange_id in EXCHANGES_WITH_PASSWORD:
@@ -108,6 +132,7 @@ def add_exchange_interactive() -> ExchangeConfig | None:
         api_key=api_key,
         api_secret=api_secret,
         password=password,
+        wallet_address=wallet_address,
         sandbox=sandbox,
     )
     config.save()

@@ -142,5 +142,15 @@ def status():
     console.print()
 
 
+@app.command("create-wallet")
+def create_wallet():
+    """Generate an API wallet for wallet-based exchanges (e.g. HyperLiquid)."""
+    from gateway.utils.logging import setup_logging
+    from gateway.wallet_manager import create_hyperliquid_wallet
+
+    setup_logging("INFO")
+    create_hyperliquid_wallet()
+
+
 if __name__ == "__main__":
     app()

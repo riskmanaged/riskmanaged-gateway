@@ -106,6 +106,7 @@ class ExchangeConfig:
         api_key: str,
         api_secret: str,
         password: Optional[str] = None,
+        wallet_address: Optional[str] = None,
         sandbox: bool = False,
     ):
         self.id = id
@@ -114,6 +115,7 @@ class ExchangeConfig:
         self.api_key = api_key
         self.api_secret = api_secret
         self.password = password
+        self.wallet_address = wallet_address
         self.sandbox = sandbox
 
     @classmethod
@@ -129,6 +131,7 @@ class ExchangeConfig:
             api_key=raw.get("api_key", ""),
             api_secret=raw.get("api_secret", ""),
             password=raw.get("password"),
+            wallet_address=raw.get("wallet_address"),
             sandbox=raw.get("sandbox", False),
         )
 
@@ -145,6 +148,7 @@ class ExchangeConfig:
             "api_key": self.api_key,
             "api_secret": self.api_secret,
             "password": self.password,
+            "wallet_address": self.wallet_address,
             "sandbox": self.sandbox,
         }
         with open(path, "w") as f:
