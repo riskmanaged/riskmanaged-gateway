@@ -43,6 +43,34 @@ riskmanaged-gateway remove-exchange <label>
 riskmanaged-gateway status
 ```
 
+## Supported Exchanges (23)
+
+| Exchange | CCXT ID | Auth Type |
+|----------|---------|-----------|
+| Binance | `binance` | Key + Secret |
+| Bybit | `bybit` | Key + Secret |
+| KuCoin | `kucoin` | Key + Secret + Passphrase |
+| Kraken | `kraken` | Key + Secret |
+| Coinbase | `coinbase` | Key + Secret |
+| Bitvavo | `bitvavo` | Key + Secret |
+| OKX | `okx` | Key + Secret + Passphrase |
+| Crypto.com | `cryptocom` | Key + Secret |
+| MEXC | `mexc` | Key + Secret |
+| BitMEX | `bitmex` | Key + Secret |
+| HyperLiquid | `hyperliquid` | Wallet (address + privateKey) |
+| Gate.io | `gate` | Key + Secret |
+| Bitget | `bitget` | Key + Secret + Passphrase |
+| HTX | `htx` | Key + Secret |
+| Phemex | `phemex` | Key + Secret |
+| Bitfinex | `bitfinex` | Key + Secret |
+| Gemini | `gemini` | Key + Secret |
+| WhiteBIT | `whitebit` | Key + Secret |
+| Poloniex | `poloniex` | Key + Secret |
+| WOO X | `woo` | Key + Secret |
+| LBank | `lbank` | Key + Secret |
+| Deribit | `deribit` | Key + Secret |
+| AscendEX | `ascendex` | Key + Secret |
+
 ## How It Works
 
 ```
@@ -52,7 +80,8 @@ riskmanaged-gateway status
 │  riskmanaged-gateway │                  │  Strategy Engine      │
 │  ├── binance-main    │                  │  Position Manager     │
 │  ├── bybit-trading   │                  │  Signal Processing    │
-│  └── kraken-primary  │                  │  Risk Guard           │
+│  ├── gate-spot       │                  │  Risk Guard           │
+│  └── bitget-deriv    │                  │                       │
 │                      │                  │                       │
 │  Exchange API Keys   │                  │  No API keys stored   │
 │  (stored locally)    │                  │  (proxy mode only)    │
@@ -75,7 +104,8 @@ All configuration is stored in `~/.riskmanaged/`:
 └── exchanges/
     ├── binance-main.yaml          # One file per exchange
     ├── binance-subaccount-a.yaml
-    └── bybit-trading.yaml
+    ├── gate-spot.yaml
+    └── bitget-trading.yaml
 ```
 
 ### Environment Variables
@@ -119,3 +149,4 @@ journalctl --user -u riskmanaged-gateway -f
 ## License
 
 MIT
+

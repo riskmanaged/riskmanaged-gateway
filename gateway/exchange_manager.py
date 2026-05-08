@@ -24,10 +24,22 @@ SUPPORTED_EXCHANGES = {
     "9": ("mexc", "MEXC"),
     "10": ("bitmex", "BitMEX"),
     "11": ("hyperliquid", "HyperLiquid"),
+    "12": ("gate", "Gate.io"),
+    "13": ("bitget", "Bitget"),
+    "14": ("htx", "HTX"),
+    "15": ("phemex", "Phemex"),
+    "16": ("bitfinex", "Bitfinex"),
+    "17": ("gemini", "Gemini"),
+    "18": ("whitebit", "WhiteBIT"),
+    "19": ("poloniex", "Poloniex"),
+    "20": ("woo", "WOO X"),
+    "21": ("lbank", "LBank"),
+    "22": ("deribit", "Deribit"),
+    "23": ("ascendex", "AscendEX"),
 }
 
 # Exchanges that require a password/passphrase
-EXCHANGES_WITH_PASSWORD = {"kucoin", "okx"}
+EXCHANGES_WITH_PASSWORD = {"kucoin", "okx", "bitget"}
 
 # Exchanges that use wallet-based auth (walletAddress + privateKey)
 WALLET_BASED_EXCHANGES = {"hyperliquid"}
@@ -42,7 +54,7 @@ def add_exchange_interactive() -> ExchangeConfig | None:
     for num, (exchange_id, display_name) in SUPPORTED_EXCHANGES.items():
         console.print(f"  {num}. {display_name}")
 
-    choice = console.input("\n[bold]Select exchange (1-11):[/bold] ").strip()
+    choice = console.input("\n[bold]Select exchange (1-23):[/bold] ").strip()
     if choice not in SUPPORTED_EXCHANGES:
         console.print("[red]Invalid choice[/red]")
         return None
